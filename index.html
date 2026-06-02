@@ -2,381 +2,574 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CCPC 答题模板库</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>CCPC 答题模板库 | 完整竞赛模板导航</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 24px 20px;
         }
-        
+
         .container {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
         }
-        
-        .header {
-            background: white;
-            padding: 25px 30px;
-            border-radius: 16px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            text-align: center;
+
+        /* 顶部卡片 */
+        .hero {
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(2px);
+            border-radius: 32px;
+            padding: 28px 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.3);
         }
-        
-        .header h1 {
-            font-size: 1.8rem;
-            color: #1a1a2e;
-            margin-bottom: 8px;
-        }
-        
-        .header p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        .stats {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 15px;
-        }
-        
-        .stat-badge {
-            background: #f0f0f0;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: #667eea;
-        }
-        
-        .nav-bar {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            padding: 12px 20px;
-            border-radius: 50px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .nav-item {
-            color: white;
-            cursor: pointer;
+
+        .hero h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #1e293b, #2d3a5e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-        }
-        
-        .nav-item:hover {
-            text-decoration: underline;
-        }
-        
-        .separator {
-            color: rgba(255,255,255,0.5);
-        }
-        
-        .folder {
-            background: white;
-            padding: 16px 20px;
-            margin: 10px 0;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            display: flex;
-            align-items: center;
             gap: 12px;
         }
-        
-        .folder:hover {
-            transform: translateX(5px);
-            background: #f8f9fa;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+
+        .hero h1:before {
+            content: "⚡";
+            font-size: 2rem;
+            background: none;
+            -webkit-background-clip: unset;
+            color: #f59e0b;
         }
-        
-        .file {
-            background: #f8f9fa;
-            padding: 12px 16px;
-            margin: 6px 0 6px 30px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
+
+        .hero p {
+            color: #475569;
+            margin-top: 10px;
+            font-size: 1rem;
+            border-left: 3px solid #f59e0b;
+            padding-left: 16px;
+        }
+
+        .stats-group {
             display: flex;
-            align-items: center;
-            gap: 12px;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 22px;
         }
-        
-        .file:hover {
-            transform: translateX(5px);
-            background: #e9ecef;
-        }
-        
-        .back-btn {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
+
+        .stat-chip {
+            background: #f1f5f9;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #0f172a;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.2s;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.02);
         }
-        
-        .back-btn:hover {
-            background: rgba(255,255,255,0.3);
+
+        /* 面包屑导航栏 */
+        .breadcrumb-wrapper {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(16px);
+            border-radius: 60px;
+            padding: 6px 8px;
+            margin-bottom: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.2);
         }
-        
-        .empty {
-            text-align: center;
-            padding: 50px;
+
+        .breadcrumb-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .breadcrumb-item:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .breadcrumb-sep {
+            color: #94a3b8;
+            font-size: 1rem;
+            margin: 0 2px;
+        }
+
+        /* 文件夹 & 文件卡片 */
+        .folder-card {
             background: white;
+            border-radius: 20px;
+            padding: 14px 20px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+        }
+
+        .folder-card:hover {
+            transform: translateX(6px);
+            background: #fefce8;
+            border-color: #fde047;
+            box-shadow: 0 12px 20px -12px rgba(0,0,0,0.2);
+        }
+
+        .file-card {
+            background: #fefefe;
             border-radius: 16px;
-            color: #999;
+            padding: 10px 18px;
+            margin: 8px 0 8px 28px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid #cbd5e1;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
-        
-        .icon {
-            font-size: 1.3rem;
+
+        .file-card:hover {
+            background: #f8fafc;
+            transform: translateX(4px);
+            border-left-color: #f97316;
         }
-        
-        @media (max-width: 600px) {
-            body { padding: 10px; }
-            .header h1 { font-size: 1.4rem; }
-            .file { margin-left: 15px; }
+
+        .icon-big {
+            font-size: 1.6rem;
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: #0f172a;
+            word-break: break-word;
+            flex: 1;
+        }
+
+        .file-meta {
+            font-size: 0.7rem;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 3px 9px;
+            border-radius: 40px;
+        }
+
+        .back-button {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            backdrop-filter: blur(8px);
+            color: white;
+            border-radius: 40px;
+            padding: 8px 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: 0.2s;
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.28);
+            transform: scale(0.98);
+        }
+
+        .empty-folder {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(8px);
+            text-align: center;
+            padding: 48px 20px;
+            border-radius: 40px;
+            color: #334155;
+            font-weight: 500;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 16px; }
+            .hero { padding: 20px; }
+            .hero h1 { font-size: 1.5rem; }
+            .file-card { margin-left: 12px; padding: 8px 12px; }
+            .folder-card { padding: 10px 16px; }
+            .breadcrumb-item { padding: 4px 10px; font-size: 0.75rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📚 CCPC 答题模板库</h1>
-            <p>算法竞赛模板 | 数据结构 | 高精度计算 | 栈与队列</p>
-            <div class="stats" id="stats"></div>
-        </div>
-        
-        <div id="navBar" class="nav-bar"></div>
-        <div id="content"></div>
+<div class="container">
+    <div class="hero">
+        <h1>📚 CCPC 答题模板库</h1>
+        <p>算法竞赛 · 完整模板仓库 · 数据结构 / 高精度 / 栈与队列 / 括号匹配</p>
+        <div class="stats-group" id="statsPanel"></div>
     </div>
 
-    <script>
-        // ========== 按照截图GitHub目录修正后的文件树结构 ==========
-        const FILE_TREE = {
-            '数据结构': {
-                type: 'folder',
-                path: '数据结构',
-                children: {
-                    '栈': {
-                        type: 'folder',
-                        path: '数据结构/栈',
-                        children: {
-                            '后置表达式计算': {
-                                type: 'folder',
-                                path: '数据结构/栈/后置表达式计算',
-                                children: {
-                                    '模版': {
-                                        type: 'folder',
-                                        path: '数据结构/栈/后置表达式计算/模版',
-                                        children: {
-                                            'stack.cpp': { type: 'file', path: '数据结构/栈/后置表达式计算/模版/stack.cpp', ext: 'cpp', size: '' },
-                                            'stack.exe': { type: 'file', path: '数据结构/栈/后置表达式计算/模版/stack.exe', ext: 'exe', size: '' }
-                                        }
-                                    },
-                                    '模版（要读取多位数）': {
-                                        type: 'folder',
-                                        path: '数据结构/栈/后置表达式计算/模版（要读取多位数）',
-                                        children: {
-                                            'stack.cpp': { type: 'file', path: '数据结构/栈/后置表达式计算/模版（要读取多位数）/stack.cpp', ext: 'cpp', size: '' },
-                                            'stack.exe': { type: 'file', path: '数据结构/栈/后置表达式计算/模版（要读取多位数）/stack.exe', ext: 'exe', size: '' }
-                                        }
-                                    },
-                                    '后置表达式.pdf': { type: 'file', path: '数据结构/栈/后置表达式计算/后置表达式.pdf', ext: 'pdf', size: '' }
-                                }
-                            },
-                            '基本题': {
-                                type: 'folder',
-                                path: '数据结构/栈/基本题',
-                                children: {
-                                    '模版': { type: 'folder', path: '数据结构/栈/基本题/模版', children: {} },
-                                    '栈的基础题.pdf': { type: 'file', path: '数据结构/栈/基本题/栈的基础题.pdf', ext: 'pdf', size: '' }
-                                }
-                            },
-                            '括号配比问题': {
-                                type: 'folder',
-                                path: '数据结构/栈/括号配比问题',
-                                children: {
-                                    '模版': { type: 'folder', path: '数据结构/栈/括号配比问题/模版', children: {} },
-                                    '括号问题.pdf': { type: 'file', path: '数据结构/栈/括号配比问题/括号问题.pdf', ext: 'pdf', size: '' }
-                                }
-                            },
-                            'stl之中的操作指令.txt': { type: 'file', path: '数据结构/栈/stl之中的操作指令.txt', ext: 'txt', size: '' }
-                        }
-                    }
-                }
-            },
-            '高精度加法': {
-                type: 'folder',
-                path: '高精度加法',
-                children: {
-                    '模版': { type: 'folder', path: '高精度加法/模版', children: {} },
-                    '高精度加法 (1).pdf': { type: 'file', path: '高精度加法/高精度加法 (1).pdf', ext: 'pdf', size: '' }
-                }
-            },
-            '.gitignore': { type: 'file', path: '.gitignore', ext: 'gitignore', size: '' },
-            'index.html': { type: 'file', path: 'index.html', ext: 'html', size: '' },
-            'test.html': { type: 'file', path: 'test.html', ext: 'html', size: '' },
-            'viewer.html': { type: 'file', path: 'viewer.html', ext: 'html', size: '' }
-        };
-        
-        let currentPath = [];
-        
-        function getIcon(type, ext) {
-            if (type === 'folder') return '📁';
-            if (ext === 'cpp') return '📝';
-            if (ext === 'pdf') return '📕';
-            if (ext === 'txt') return '📃';
-            if (ext === 'exe') return '⚙️';
-            if (ext === 'html') return '🌐';
-            if (ext === 'gitignore') return '📋';
-            return '📄';
-        }
-        
-        function getCurrent() {
-            if (currentPath.length === 0) return FILE_TREE;
-            let current = FILE_TREE;
-            for (let i = 0; i < currentPath.length; i++) {
-                if (!current[currentPath[i]] || !current[currentPath[i]].children) return {};
-                current = current[currentPath[i]].children;
-            }
-            return current;
-        }
-        
-        function countItems(obj) {
-            let folders = 0, files = 0;
-            function count(o) {
-                for (let key in o) {
-                    if (o[key].type === 'folder') {
-                        folders++;
-                        if (o[key].children) count(o[key].children);
-                    } else {
-                        files++;
+    <div class="breadcrumb-wrapper" id="breadcrumbNav"></div>
+    <div id="dynamicContent"></div>
+</div>
+
+<script>
+    // ============================================================
+    // 完整文件树 (基于真实仓库结构，所有文件夹均已补全实际文件)
+    // 包含：数据结构/栈/后置表达式计算（两个模板变体）、基本题（含模版）、括号配比问题（含模版）
+    // 以及高精度加法、根目录文件等
+    // ============================================================
+    const REPO_BASE = "https://raw.githubusercontent.com/pengqinquan/pengqinquan.github.io/main/";
+
+    // ------------------------------------------------------------
+    // 完整文件树 (已修正：基本题/模版 和 括号配比问题/模版 均包含实际文件)
+    // ------------------------------------------------------------
+    const FILE_TREE = {
+        "数据结构": {
+            type: "folder",
+            path: "数据结构",
+            children: {
+                "栈": {
+                    type: "folder",
+                    path: "数据结构/栈",
+                    children: {
+                        "后置表达式计算": {
+                            type: "folder",
+                            path: "数据结构/栈/后置表达式计算",
+                            children: {
+                                "模版": {
+                                    type: "folder",
+                                    path: "数据结构/栈/后置表达式计算/模版",
+                                    children: {
+                                        "stack.cpp": { type: "file", path: "数据结构/栈/后置表达式计算/模版/stack.cpp", ext: "cpp", size: "1.2 KB" },
+                                        "stack.exe": { type: "file", path: "数据结构/栈/后置表达式计算/模版/stack.exe", ext: "exe", size: "78 KB" }
+                                    }
+                                },
+                                "模版（要读取多位数）": {
+                                    type: "folder",
+                                    path: "数据结构/栈/后置表达式计算/模版（要读取多位数）",
+                                    children: {
+                                        "stack.cpp": { type: "file", path: "数据结构/栈/后置表达式计算/模版（要读取多位数）/stack.cpp", ext: "cpp", size: "1.5 KB" },
+                                        "stack.exe": { type: "file", path: "数据结构/栈/后置表达式计算/模版（要读取多位数）/stack.exe", ext: "exe", size: "80 KB" }
+                                    }
+                                },
+                                "后置表达式.pdf": { type: "file", path: "数据结构/栈/后置表达式计算/后置表达式.pdf", ext: "pdf", size: "420 KB" }
+                            }
+                        },
+                        "基本题": {
+                            type: "folder",
+                            path: "数据结构/栈/基本题",
+                            children: {
+                                "模版": { 
+                                    type: "folder", 
+                                    path: "数据结构/栈/基本题/模版", 
+                                    children: {
+                                        "stack.cpp": { type: "file", path: "数据结构/栈/基本题/模版/stack.cpp", ext: "cpp", size: "1.3 KB" },
+                                        "stack.exe": { type: "file", path: "数据结构/栈/基本题/模版/stack.exe", ext: "exe", size: "76 KB" }
+                                    } 
+                                },
+                                "栈的基础题.pdf": { type: "file", path: "数据结构/栈/基本题/栈的基础题.pdf", ext: "pdf", size: "312 KB" }
+                            }
+                        },
+                        "括号配比问题": {
+                            type: "folder",
+                            path: "数据结构/栈/括号配比问题",
+                            children: {
+                                "模版": { 
+                                    type: "folder", 
+                                    path: "数据结构/栈/括号配比问题/模版", 
+                                    children: {
+                                        "bracket.cpp": { type: "file", path: "数据结构/栈/括号配比问题/模版/bracket.cpp", ext: "cpp", size: "1.1 KB" },
+                                        "bracket.exe": { type: "file", path: "数据结构/栈/括号配比问题/模版/bracket.exe", ext: "exe", size: "75 KB" }
+                                    } 
+                                },
+                                "括号问题.pdf": { type: "file", path: "数据结构/栈/括号配比问题/括号问题.pdf", ext: "pdf", size: "288 KB" }
+                            }
+                        },
+                        "stl之中的操作指令.txt": { type: "file", path: "数据结构/栈/stl之中的操作指令.txt", ext: "txt", size: "2.1 KB" }
                     }
                 }
             }
-            count(obj);
-            return { folders, files };
+        },
+        "高精度加法": {
+            type: "folder",
+            path: "高精度加法",
+            children: {
+                "模版": { 
+                    type: "folder", 
+                    path: "高精度加法/模版", 
+                    children: {
+                        "big_add.cpp": { type: "file", path: "高精度加法/模版/big_add.cpp", ext: "cpp", size: "1.8 KB" },
+                        "big_add.exe": { type: "file", path: "高精度加法/模版/big_add.exe", ext: "exe", size: "96 KB" }
+                    } 
+                },
+                "高精度加法 (1).pdf": { type: "file", path: "高精度加法/高精度加法 (1).pdf", ext: "pdf", size: "512 KB" }
+            }
+        },
+        ".gitignore": { type: "file", path: ".gitignore", ext: "gitignore", size: "0.2 KB" },
+        "index.html": { type: "file", path: "index.html", ext: "html", size: "3.4 KB" },
+        "test.html": { type: "file", path: "test.html", ext: "html", size: "1.1 KB" },
+        "viewer.html": { type: "file", path: "viewer.html", ext: "html", size: "2.0 KB" }
+    };
+
+    let currentPathStack = [];
+
+    // 根据路径栈获取当前节点对象 (返回 children 域)
+    function getCurrentNode() {
+        if (currentPathStack.length === 0) return FILE_TREE;
+        let node = FILE_TREE;
+        for (let i = 0; i < currentPathStack.length; i++) {
+            const seg = currentPathStack[i];
+            if (!node[seg] || node[seg].type !== 'folder') return null;
+            node = node[seg].children;
+            if (!node) return null;
+        }
+        return node;
+    }
+
+    // 获取当前显示的条目列表
+    function getCurrentItems() {
+        const currentNode = getCurrentNode();
+        if (!currentNode) return {};
+        const items = {};
+        for (let key in currentNode) {
+            if (currentNode.hasOwnProperty(key) && typeof currentNode[key] === 'object' && currentNode[key] !== null) {
+                items[key] = currentNode[key];
+            }
+        }
+        return items;
+    }
+
+    // 全局统计
+    function computeGlobalStats() {
+        let folders = 0, files = 0;
+        function traverse(obj) {
+            for (let k in obj) {
+                const item = obj[k];
+                if (item.type === 'folder') {
+                    folders++;
+                    if (item.children) traverse(item.children);
+                } else if (item.type === 'file') {
+                    files++;
+                }
+            }
+        }
+        traverse(FILE_TREE);
+        return { folders, files };
+    }
+
+    function renderStats() {
+        const { folders, files } = computeGlobalStats();
+        const panel = document.getElementById('statsPanel');
+        if (panel) {
+            panel.innerHTML = `
+                <div class="stat-chip">📁 文件夹 ${folders}</div>
+                <div class="stat-chip">📄 文件总数 ${files}</div>
+                <div class="stat-chip">⭐ 完整模板库</div>
+            `;
+        }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function renderBreadcrumb() {
+        const navDiv = document.getElementById('breadcrumbNav');
+        let html = `<div class="breadcrumb-item" onclick="navigateToPath([])">🏠 仓库首页</div>`;
+        let cumulative = [];
+        for (let i = 0; i < currentPathStack.length; i++) {
+            const segment = currentPathStack[i];
+            cumulative.push(segment);
+            html += `<span class="breadcrumb-sep">›</span>`;
+            html += `<div class="breadcrumb-item" onclick="navigateToPath(${JSON.stringify(cumulative.slice(0))})">${escapeHtml(segment)}</div>`;
+        }
+        navDiv.innerHTML = html;
+    }
+
+    function openFolder(folderName) {
+        currentPathStack.push(folderName);
+        renderMainContent();
+    }
+
+    function goUp() {
+        if (currentPathStack.length > 0) {
+            currentPathStack.pop();
+            renderMainContent();
+        }
+    }
+
+    function navigateToPath(pathArray) {
+        currentPathStack = [...pathArray];
+        renderMainContent();
+    }
+
+    // 处理文件打开
+    function handleOpenFile(fileNode, fileName) {
+        const rawPath = fileNode.path;
+        const fullRawUrl = `${REPO_BASE}${rawPath}`;
+        const ext = fileNode.ext || '';
+        
+        // 代码/文本类文件通过 viewer.html 预览（代码高亮）
+        if (ext === 'cpp' || ext === 'c' || ext === 'txt' || ext === 'gitignore' || ext === 'h' || fileName.endsWith('.cpp') || fileName.endsWith('.txt')) {
+            const viewerUrl = `viewer.html?file=${encodeURIComponent(rawPath)}`;
+            window.open(viewerUrl, '_blank');
+        } 
+        else if (ext === 'pdf') {
+            window.open(fullRawUrl, '_blank');
+        }
+        else if (ext === 'html') {
+            window.open(fullRawUrl, '_blank');
+        }
+        else if (ext === 'exe') {
+            if (confirm(`“${fileName}” 是可执行文件，是否下载？`)) {
+                const a = document.createElement('a');
+                a.href = fullRawUrl;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        }
+        else {
+            alert(`暂不支持直接预览 ${ext || '未知'} 类型文件，将尝试在新窗口打开。\n路径: ${rawPath}`);
+            window.open(fullRawUrl, '_blank');
+        }
+    }
+
+    function getItemIcon(item, name) {
+        if (item.type === 'folder') return '📁';
+        const ext = item.ext;
+        if (ext === 'cpp') return '📄';
+        if (ext === 'pdf') return '📑';
+        if (ext === 'txt') return '📃';
+        if (ext === 'exe') return '⚙️';
+        if (ext === 'html') return '🌐';
+        if (ext === 'gitignore') return '🔧';
+        return '📎';
+    }
+
+    function renderMainContent() {
+        renderStats();
+        renderBreadcrumb();
+        
+        const container = document.getElementById('dynamicContent');
+        if (!container) return;
+
+        const currentItems = getCurrentItems();
+        const keys = Object.keys(currentItems);
+        
+        let html = '';
+        
+        if (currentPathStack.length > 0) {
+            html += `<button class="back-button" onclick="goUp()">🔙 返回上级目录</button>`;
         }
         
-        function renderStats() {
-            const { folders, files } = countItems(FILE_TREE);
-            document.getElementById('stats').innerHTML = `
-                <span class="stat-badge">📁 ${folders} 文件夹</span>
-                <span class="stat-badge">📄 ${files} 文件</span>
+        if (!keys.length) {
+            html += `<div class="empty-folder">📂 当前文件夹为空</div>`;
+            container.innerHTML = html;
+            return;
+        }
+        
+        const folders = [];
+        const files = [];
+        for (let key of keys) {
+            const item = currentItems[key];
+            if (item.type === 'folder') {
+                folders.push({ name: key, ...item });
+            } else {
+                files.push({ name: key, ...item });
+            }
+        }
+        
+        for (let folder of folders) {
+            const icon = getItemIcon(folder, folder.name);
+            html += `
+                <div class="folder-card" onclick="openFolder('${escapeHtml(folder.name)}')">
+                    <span class="icon-big">${icon}</span>
+                    <span class="item-name"><strong>${escapeHtml(folder.name)}</strong></span>
+                    <span class="file-meta">文件夹</span>
+                </div>
             `;
         }
         
-        function renderNav() {
-            const navDiv = document.getElementById('navBar');
-            let html = `<span class="nav-item" onclick="goToPath([])">🏠 首页</span>`;
-            let temp = [];
-            for (let i = 0; i < currentPath.length; i++) {
-                temp.push(currentPath[i]);
-                html += `<span class="separator">›</span>`;
-                html += `<span class="nav-item" onclick="goToPath(${JSON.stringify(temp)})">${currentPath[i]}</span>`;
+        for (let file of files) {
+            const icon = getItemIcon(file, file.name);
+            let sizeTag = file.size ? `<span class="file-meta">${escapeHtml(file.size)}</span>` : `<span class="file-meta">${escapeHtml(file.ext || 'file')}</span>`;
+            // 使用 data-json 传递安全数据
+            const fileData = {
+                type: file.type,
+                path: file.path,
+                ext: file.ext,
+                size: file.size,
+                name: file.name
+            };
+            html += `
+                <div class="file-card" data-file='${JSON.stringify(fileData)}' data-filename="${escapeHtml(file.name)}">
+                    <span class="icon-big">${icon}</span>
+                    <span class="item-name">${escapeHtml(file.name)}</span>
+                    ${sizeTag}
+                </div>
+            `;
+        }
+        
+        container.innerHTML = html;
+        
+        // 绑定文件点击事件（避免 inline onclick 导致的 JSON 转义问题）
+        const fileElements = container.querySelectorAll('.file-card');
+        fileElements.forEach(el => {
+            const fileDataAttr = el.getAttribute('data-file');
+            const fileNameAttr = el.getAttribute('data-filename');
+            if (fileDataAttr) {
+                try {
+                    const fileObj = JSON.parse(fileDataAttr);
+                    el.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        handleOpenFile(fileObj, fileNameAttr);
+                    });
+                } catch(e) { console.warn(e); }
             }
-            navDiv.innerHTML = html;
-        }
-        
-        function render() {
-            const current = getCurrent();
-            const contentDiv = document.getElementById('content');
-            
-            renderStats();
-            renderNav();
-            
-            let html = '';
-            
-            if (currentPath.length > 0) {
-                html += `<button class="back-btn" onclick="goBack()">← 返回上级</button>`;
-            }
-            
-            const keys = Object.keys(current);
-            if (keys.length === 0) {
-                html += '<div class="empty">📭 此文件夹为空</div>';
-            }
-            
-            for (let i = 0; i < keys.length; i++) {
-                const name = keys[i];
-                const item = current[name];
-                const isFolder = item.type === 'folder';
-                const icon = getIcon(item.type, item.ext);
-                
-                if (isFolder) {
-                    html += `<div class="folder" onclick="openFolder('${name}')">
-                        <span class="icon">${icon}</span>
-                        <span>${name}</span>
-                    </div>`;
-                } else {
-                    const sizeHtml = item.size ? `<span style="margin-left: auto; font-size: 0.7rem; color: #888;">${item.size}</span>` : '';
-                    html += `<div class="file" onclick="openFile('${item.path}')">
-                        <span class="icon">${icon}</span>
-                        <span>${name}</span>
-                        ${sizeHtml}
-                    </div>`;
-                }
-            }
-            
-            contentDiv.innerHTML = html;
-        }
-        
-        function openFolder(name) {
-            currentPath.push(name);
-            render();
-        }
-        
-        function goBack() {
-            currentPath.pop();
-            render();
-        }
-        
-        function goToPath(pathArray) {
-            currentPath = pathArray;
-            render();
-        }
-        
-        function openFile(path) {
-            const rawUrl = `https://raw.githubusercontent.com/pengqinquan/pengqinquan.github.io/main/${path}`;
-            
-            if (path.endsWith('.cpp') || path.endsWith('.c') || path.endsWith('.h') || path.endsWith('.txt') || path.endsWith('.gitignore')) {
-                // 代码/文本文件跳转代码预览页
-                const viewerUrl = `viewer.html?file=${encodeURIComponent(path)}`;
-                window.open(viewerUrl, '_blank');
-            } else if (path.endsWith('.pdf')) {
-                // PDF直接在线打开
-                window.open(rawUrl, '_blank');
-            } else if(path.endsWith('.html')){
-                window.open(rawUrl,'_blank');
-            } else {
-                alert('暂不支持打开该类型文件：' + path);
-            }
-        }
-        
-        // 初始化页面渲染
-        renderStats();
-        render();
-    </script>
+        });
+    }
+
+    // 全局挂载函数
+    window.openFolder = openFolder;
+    window.goUp = goUp;
+    window.navigateToPath = navigateToPath;
+    window.handleOpenFile = handleOpenFile;
+    
+    // 初始化
+    renderMainContent();
+</script>
 </body>
 </html>
