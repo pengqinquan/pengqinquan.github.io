@@ -13,7 +13,7 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', monospace;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
@@ -22,54 +22,22 @@
             max-width: 1000px;
             margin: 0 auto;
         }
-        .header {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .title i {
-            font-size: 1.5rem;
-        }
-        .btn-group {
-            display: flex;
-            gap: 10px;
-        }
-        .btn {
-            background: #f0f0f0;
-            border: none;
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
             padding: 8px 16px;
-            border-radius: 8px;
+            border: none;
+            border-radius: 30px;
             cursor: pointer;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn:hover {
-            background: #e0e0e0;
-        }
-        .back-link {
+            margin-bottom: 15px;
+            font-size: 0.9rem;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: white;
-            text-decoration: none;
-            margin-bottom: 15px;
-            background: rgba(255,255,255,0.2);
-            padding: 8px 16px;
-            border-radius: 30px;
+            transition: all 0.2s;
+        }
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
         }
         .code-card {
             background: #0d1117;
@@ -89,135 +57,172 @@
         }
         .filename {
             color: #c9d1d9;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            background: #21262d;
+            color: #c9d1d9;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+        .btn:hover {
+            background: #30363d;
+            color: white;
         }
         pre {
             margin: 0;
             padding: 20px;
             overflow-x: auto;
-            font-size: 13px;
-            line-height: 1.5;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #8b949e;
+            font-size: 1rem;
         }
         .error {
-            background: rgba(255,255,255,0.95);
+            background: #161b22;
             border-radius: 16px;
             padding: 40px;
             text-align: center;
-            color: #dc3545;
+            color: #f85149;
+        }
+        .file-icon {
+            font-size: 1.1rem;
         }
         @media (max-width: 600px) {
-            pre { padding: 12px; font-size: 11px; }
-            .header { flex-direction: column; text-align: center; }
+            pre { padding: 12px; font-size: 12px; }
+            .code-header { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="javascript:history.back()" class="back-link">← 返回模板库</a>
+        <button class="back-btn" onclick="window.close();">← 返回模板库</button>
         
-        <div class="code-card" id="codeCard">
+        <div class="code-card">
             <div class="code-header">
                 <div class="filename" id="filename">
-                    <i class="file-icon">📄</i> 加载中...
+                    <span class="file-icon">📄</span> 加载中...
                 </div>
                 <div class="btn-group">
                     <button class="btn" id="copyBtn">📋 复制代码</button>
                     <button class="btn" id="downloadBtn">💾 下载文件</button>
                 </div>
             </div>
-            <div id="content">
-                <div style="text-align: center; padding: 50px; color: #888;">
-                    <i>⏳ 加载代码中...</i>
-                </div>
+            <div id="content" class="loading">
+                ⏳ 正在从 GitHub 加载代码...
             </div>
         </div>
     </div>
 
     <script>
+        // 获取 URL 参数
         function getUrlParam(name) {
             const params = new URLSearchParams(window.location.search);
             return params.get(name);
         }
-        
+
+        // GitHub 配置（和你主页完全一致）
         const USER = 'pengqinquan';
         const REPO = 'pengqinquan.github.io';
         const BRANCH = 'main';
-        
+
+        // 获取文件原始地址
         function getRawUrl(path) {
             return `https://raw.githubusercontent.com/${USER}/${REPO}/${BRANCH}/${path}`;
         }
-        
+
+        // HTML 转义
         function escapeHtml(text) {
-            return text.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
         }
-        
-        async function load() {
-            let filePath = getUrlParam('file');
-            
+
+        // 加载文件
+        async function loadFile() {
+            const filePath = getUrlParam('file');
             if (!filePath) {
-                document.getElementById('content').innerHTML = '<div class="error">❌ 未指定文件</div>';
-                document.getElementById('filename').innerHTML = '<i class="file-icon">❌</i> 错误';
+                document.getElementById('content').innerHTML = '<div class="error">❌ 未指定文件路径</div>';
+                document.getElementById('filename').innerHTML = '<span class="file-icon">❌</span> 错误';
                 return;
             }
-            
-            filePath = decodeURIComponent(filePath);
-            const fileName = filePath.split('/').pop();
+
+            const realPath = decodeURIComponent(filePath);
+            const fileName = realPath.split('/').pop();
             document.title = `${fileName} - CCPC模板库`;
-            
-            const icon = fileName.endsWith('.cpp') ? '📝' : (fileName.endsWith('.pdf') ? '📕' : '📄');
-            document.getElementById('filename').innerHTML = `<i class="file-icon">${icon}</i> ${fileName}`;
-            
+
+            // 设置图标
+            let icon = '📄';
+            if (fileName.endsWith('.cpp') || fileName.endsWith('.c') || fileName.endsWith('.h')) icon = '📝';
+            else if (fileName.endsWith('.txt')) icon = '📃';
+            else if (fileName.endsWith('.gitignore')) icon = '📋';
+            document.getElementById('filename').innerHTML = `<span class="file-icon">${icon}</span> ${fileName}`;
+
             try {
-                const url = getRawUrl(filePath);
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const code = await response.text();
-                
+                const res = await fetch(getRawUrl(realPath));
+                if (!res.ok) throw new Error(`加载失败 ${res.status}`);
+                const code = await res.text();
+                window.currentCode = code;
+
+                // 自动识别语言
                 let lang = 'text';
-                if (fileName.endsWith('.cpp')) lang = 'cpp';
-                else if (fileName.endsWith('.c')) lang = 'c';
-                else if (fileName.endsWith('.h')) lang = 'cpp';
+                if (fileName.endsWith('.cpp') || fileName.endsWith('.c') || fileName.endsWith('.h')) lang = 'cpp';
                 else if (fileName.endsWith('.py')) lang = 'python';
                 else if (fileName.endsWith('.java')) lang = 'java';
-                
-                const html = `<pre><code class="language-${lang}">${escapeHtml(code)}</code></pre>`;
-                document.getElementById('content').innerHTML = html;
+
+                document.getElementById('content').innerHTML =
+                    `<pre><code class="language-${lang}">${escapeHtml(code)}</code></pre>`;
                 hljs.highlightAll();
-                window.currentCode = code;
-            } catch (error) {
-                document.getElementById('content').innerHTML = `<div class="error">❌ 加载失败: ${error.message}</div>`;
+
+            } catch (err) {
+                document.getElementById('content').innerHTML =
+                    `<div class="error">❌ 加载失败：${err.message}<br>请检查文件是否存在</div>`;
             }
         }
-        
+
+        // 复制代码
         document.getElementById('copyBtn').addEventListener('click', async () => {
-            if (window.currentCode) {
-                await navigator.clipboard.writeText(window.currentCode);
-                const btn = document.getElementById('copyBtn');
-                btn.innerHTML = '✅ 已复制';
-                setTimeout(() => btn.innerHTML = '📋 复制代码', 2000);
-            }
+            if (!window.currentCode) return;
+            await navigator.clipboard.writeText(window.currentCode);
+            const btn = document.getElementById('copyBtn');
+            btn.innerHTML = '✅ 复制成功';
+            setTimeout(() => btn.innerHTML = '📋 复制代码', 2000);
         });
-        
+
+        // 下载文件
         document.getElementById('downloadBtn').addEventListener('click', () => {
-            let filePath = getUrlParam('file');
-            if (filePath) {
-                filePath = decodeURIComponent(filePath);
-                const a = document.createElement('a');
-                a.href = getRawUrl(filePath);
-                a.download = filePath.split('/').pop();
-                a.click();
-            }
+            const filePath = getUrlParam('file');
+            if (!filePath) return;
+            const a = document.createElement('a');
+            a.href = getRawUrl(decodeURIComponent(filePath));
+            a.download = decodeURIComponent(filePath).split('/').pop();
+            a.click();
         });
-        
-        load();
+
+        // 初始化
+        loadFile();
     </script>
 </body>
 </html>
