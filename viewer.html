@@ -2,9 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>代码查看器 - CCPC模板库</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <style>
@@ -14,202 +13,143 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Inter', monospace;
+            font-family: 'Segoe UI', monospace;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            padding: 20px;
         }
-        .navbar {
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 1rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            gap: 10px;
         }
-        .logo {
+        .title {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 10px;
         }
-        .logo i {
+        .title i {
             font-size: 1.5rem;
-            color: #667eea;
-        }
-        .logo h2 {
-            font-size: 1.2rem;
-            font-weight: 600;
         }
         .btn-group {
             display: flex;
-            gap: 0.75rem;
+            gap: 10px;
         }
         .btn {
             background: #f0f0f0;
             border: none;
-            padding: 0.5rem 1rem;
+            padding: 8px 16px;
             border-radius: 8px;
             cursor: pointer;
-            font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            transition: all 0.2s;
+            gap: 6px;
         }
         .btn:hover {
             background: #e0e0e0;
-            transform: translateY(-1px);
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
         }
         .back-link {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 8px;
             color: white;
             text-decoration: none;
-            margin-bottom: 1.5rem;
+            margin-bottom: 15px;
             background: rgba(255,255,255,0.2);
-            padding: 0.5rem 1rem;
+            padding: 8px 16px;
             border-radius: 30px;
-            transition: all 0.2s;
-        }
-        .back-link:hover {
-            background: rgba(255,255,255,0.3);
         }
         .code-card {
             background: #0d1117;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         .code-header {
             background: #161b22;
-            padding: 1rem 1.5rem;
+            padding: 12px 20px;
             border-bottom: 1px solid #30363d;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 10px;
         }
-        .file-name {
+        .filename {
             color: #c9d1d9;
             font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-        }
-        .file-name i {
-            color: #e83e8c;
+            gap: 8px;
         }
         pre {
             margin: 0;
-            padding: 1.5rem;
+            padding: 20px;
             overflow-x: auto;
             font-size: 13px;
             line-height: 1.5;
         }
-        code {
-            font-family: 'Fira Code', 'Cascadia Code', monospace;
-        }
         .error {
             background: rgba(255,255,255,0.95);
             border-radius: 16px;
-            padding: 3rem;
+            padding: 40px;
             text-align: center;
             color: #dc3545;
         }
-        @media (max-width: 768px) {
-            .navbar { flex-direction: column; text-align: center; }
-            .container { padding: 1rem; }
-            pre { padding: 1rem; font-size: 11px; }
+        @media (max-width: 600px) {
+            pre { padding: 12px; font-size: 11px; }
+            .header { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">
-            <i class="fas fa-code"></i>
-            <h2>CCPC 模板库 · 代码查看器</h2>
-        </div>
-        <div class="btn-group">
-            <button class="btn" id="copyBtn"><i class="fas fa-copy"></i> 复制代码</button>
-            <button class="btn" id="downloadBtn"><i class="fas fa-download"></i> 下载文件</button>
-        </div>
-    </div>
     <div class="container">
-        <a href="javascript:history.back()" class="back-link"><i class="fas fa-arrow-left"></i> 返回模板库</a>
-        <div id="content">
-            <div style="text-align: center; padding: 3rem; color: white;">
-                <i class="fas fa-spinner fa-pulse"></i> 加载代码中...
+        <a href="javascript:history.back()" class="back-link">← 返回模板库</a>
+        
+        <div class="code-card" id="codeCard">
+            <div class="code-header">
+                <div class="filename" id="filename">
+                    <i class="file-icon">📄</i> 加载中...
+                </div>
+                <div class="btn-group">
+                    <button class="btn" id="copyBtn">📋 复制代码</button>
+                    <button class="btn" id="downloadBtn">💾 下载文件</button>
+                </div>
+            </div>
+            <div id="content">
+                <div style="text-align: center; padding: 50px; color: #888;">
+                    <i>⏳ 加载代码中...</i>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        function getUrlParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+        
         const USER = 'pengqinquan';
-        const REPO = 'jisuali.github.io';
+        const REPO = 'pengqinquan.github.io';
         const BRANCH = 'main';
-
+        
         function getRawUrl(path) {
             return `https://raw.githubusercontent.com/${USER}/${REPO}/${BRANCH}/${path}`;
         }
-
-        async function load() {
-            const params = new URLSearchParams(window.location.search);
-            const filePath = params.get('file');
-
-            if (!filePath) {
-                document.getElementById('content').innerHTML = '<div class="error"><i class="fas fa-exclamation-triangle"></i> 未指定文件</div>';
-                return;
-            }
-
-            const fileName = filePath.split('/').pop();
-            document.title = `${fileName} - CCPC模板库`;
-
-            try {
-                const url = getRawUrl(filePath);
-                const resp = await fetch(url);
-                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                const code = await resp.text();
-
-                let lang = 'text';
-                if (fileName.endsWith('.cpp')) lang = 'cpp';
-                else if (fileName.endsWith('.c')) lang = 'c';
-                else if (fileName.endsWith('.h')) lang = 'cpp';
-                else if (fileName.endsWith('.py')) lang = 'python';
-                else if (fileName.endsWith('.java')) lang = 'java';
-
-                const icon = fileName.endsWith('.cpp') ? '<i class="fas fa-file-code"></i>' : '<i class="fas fa-file-alt"></i>';
-
-                const html = `
-                    <div class="code-card">
-                        <div class="code-header">
-                            <div class="file-name">
-                                ${icon} ${fileName}
-                            </div>
-                            <div style="font-size: 0.7rem; color: #8b949e;">
-                                <i class="fas fa-database"></i> ${(code.length / 1024).toFixed(1)} KB
-                            </div>
-                        </div>
-                        <pre><code class="language-${lang}">${escapeHtml(code)}</code></pre>
-                    </div>
-                `;
-                document.getElementById('content').innerHTML = html;
-                hljs.highlightAll();
-                window.currentCode = code;
-            } catch(e) {
-                document.getElementById('content').innerHTML = `<div class="error"><i class="fas fa-exclamation-triangle"></i> 加载失败: ${e.message}</div>`;
-            }
-        }
-
+        
         function escapeHtml(text) {
             return text.replace(/[&<>]/g, function(m) {
                 if (m === '&') return '&amp;';
@@ -218,27 +158,65 @@
                 return m;
             });
         }
-
+        
+        async function load() {
+            let filePath = getUrlParam('file');
+            
+            if (!filePath) {
+                document.getElementById('content').innerHTML = '<div class="error">❌ 未指定文件</div>';
+                document.getElementById('filename').innerHTML = '<i class="file-icon">❌</i> 错误';
+                return;
+            }
+            
+            filePath = decodeURIComponent(filePath);
+            const fileName = filePath.split('/').pop();
+            document.title = `${fileName} - CCPC模板库`;
+            
+            const icon = fileName.endsWith('.cpp') ? '📝' : (fileName.endsWith('.pdf') ? '📕' : '📄');
+            document.getElementById('filename').innerHTML = `<i class="file-icon">${icon}</i> ${fileName}`;
+            
+            try {
+                const url = getRawUrl(filePath);
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const code = await response.text();
+                
+                let lang = 'text';
+                if (fileName.endsWith('.cpp')) lang = 'cpp';
+                else if (fileName.endsWith('.c')) lang = 'c';
+                else if (fileName.endsWith('.h')) lang = 'cpp';
+                else if (fileName.endsWith('.py')) lang = 'python';
+                else if (fileName.endsWith('.java')) lang = 'java';
+                
+                const html = `<pre><code class="language-${lang}">${escapeHtml(code)}</code></pre>`;
+                document.getElementById('content').innerHTML = html;
+                hljs.highlightAll();
+                window.currentCode = code;
+            } catch (error) {
+                document.getElementById('content').innerHTML = `<div class="error">❌ 加载失败: ${error.message}</div>`;
+            }
+        }
+        
         document.getElementById('copyBtn').addEventListener('click', async () => {
             if (window.currentCode) {
                 await navigator.clipboard.writeText(window.currentCode);
                 const btn = document.getElementById('copyBtn');
-                btn.innerHTML = '<i class="fas fa-check"></i> 已复制';
-                setTimeout(() => btn.innerHTML = '<i class="fas fa-copy"></i> 复制代码', 2000);
+                btn.innerHTML = '✅ 已复制';
+                setTimeout(() => btn.innerHTML = '📋 复制代码', 2000);
             }
         });
-
+        
         document.getElementById('downloadBtn').addEventListener('click', () => {
-            const params = new URLSearchParams(window.location.search);
-            const filePath = params.get('file');
+            let filePath = getUrlParam('file');
             if (filePath) {
+                filePath = decodeURIComponent(filePath);
                 const a = document.createElement('a');
                 a.href = getRawUrl(filePath);
                 a.download = filePath.split('/').pop();
                 a.click();
             }
         });
-
+        
         load();
     </script>
 </body>
