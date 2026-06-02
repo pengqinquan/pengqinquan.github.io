@@ -173,22 +173,8 @@
     </div>
 
     <script>
-        // ========== 文件树配置（请根据实际结构修改）==========
+        // ========== 按照截图GitHub目录修正后的文件树结构 ==========
         const FILE_TREE = {
-            '高精度加法': {
-                type: 'folder',
-                path: '高精度加法',
-                children: {
-                    '模板': {
-                        type: 'folder',
-                        path: '高精度加法/模板',
-                        children: {
-                            '高精度加法.cpp': { type: 'file', path: '高精度加法/模板/高精度加法.cpp', ext: 'cpp', size: '1.2 KB' }
-                        }
-                    },
-                    '高精度加法.pdf': { type: 'file', path: '高精度加法/高精度加法.pdf', ext: 'pdf', size: '51 KB' }
-                }
-            },
             '数据结构': {
                 type: 'folder',
                 path: '数据结构',
@@ -197,13 +183,62 @@
                         type: 'folder',
                         path: '数据结构/栈',
                         children: {
-                            '后置表达式计算': { type: 'folder', path: '数据结构/栈/后置表达式计算', children: {} },
-                            '括号配比问题': { type: 'folder', path: '数据结构/栈/括号配比问题', children: {} },
-                            'stl之中的操作指令.txt': { type: 'file', path: '数据结构/栈/stl之中的操作指令.txt', ext: 'txt', size: '1 KB' }
+                            '后置表达式计算': {
+                                type: 'folder',
+                                path: '数据结构/栈/后置表达式计算',
+                                children: {
+                                    '模版': {
+                                        type: 'folder',
+                                        path: '数据结构/栈/后置表达式计算/模版',
+                                        children: {
+                                            'stack.cpp': { type: 'file', path: '数据结构/栈/后置表达式计算/模版/stack.cpp', ext: 'cpp', size: '' },
+                                            'stack.exe': { type: 'file', path: '数据结构/栈/后置表达式计算/模版/stack.exe', ext: 'exe', size: '' }
+                                        }
+                                    },
+                                    '模版（要读取多位数）': {
+                                        type: 'folder',
+                                        path: '数据结构/栈/后置表达式计算/模版（要读取多位数）',
+                                        children: {
+                                            'stack.cpp': { type: 'file', path: '数据结构/栈/后置表达式计算/模版（要读取多位数）/stack.cpp', ext: 'cpp', size: '' },
+                                            'stack.exe': { type: 'file', path: '数据结构/栈/后置表达式计算/模版（要读取多位数）/stack.exe', ext: 'exe', size: '' }
+                                        }
+                                    },
+                                    '后置表达式.pdf': { type: 'file', path: '数据结构/栈/后置表达式计算/后置表达式.pdf', ext: 'pdf', size: '' }
+                                }
+                            },
+                            '基本题': {
+                                type: 'folder',
+                                path: '数据结构/栈/基本题',
+                                children: {
+                                    '模版': { type: 'folder', path: '数据结构/栈/基本题/模版', children: {} },
+                                    '栈的基础题.pdf': { type: 'file', path: '数据结构/栈/基本题/栈的基础题.pdf', ext: 'pdf', size: '' }
+                                }
+                            },
+                            '括号配比问题': {
+                                type: 'folder',
+                                path: '数据结构/栈/括号配比问题',
+                                children: {
+                                    '模版': { type: 'folder', path: '数据结构/栈/括号配比问题/模版', children: {} },
+                                    '括号问题.pdf': { type: 'file', path: '数据结构/栈/括号配比问题/括号问题.pdf', ext: 'pdf', size: '' }
+                                }
+                            },
+                            'stl之中的操作指令.txt': { type: 'file', path: '数据结构/栈/stl之中的操作指令.txt', ext: 'txt', size: '' }
                         }
                     }
                 }
-            }
+            },
+            '高精度加法': {
+                type: 'folder',
+                path: '高精度加法',
+                children: {
+                    '模版': { type: 'folder', path: '高精度加法/模版', children: {} },
+                    '高精度加法 (1).pdf': { type: 'file', path: '高精度加法/高精度加法 (1).pdf', ext: 'pdf', size: '' }
+                }
+            },
+            '.gitignore': { type: 'file', path: '.gitignore', ext: 'gitignore', size: '' },
+            'index.html': { type: 'file', path: 'index.html', ext: 'html', size: '' },
+            'test.html': { type: 'file', path: 'test.html', ext: 'html', size: '' },
+            'viewer.html': { type: 'file', path: 'viewer.html', ext: 'html', size: '' }
         };
         
         let currentPath = [];
@@ -213,6 +248,9 @@
             if (ext === 'cpp') return '📝';
             if (ext === 'pdf') return '📕';
             if (ext === 'txt') return '📃';
+            if (ext === 'exe') return '⚙️';
+            if (ext === 'html') return '🌐';
+            if (ext === 'gitignore') return '📋';
             return '📄';
         }
         
@@ -322,19 +360,21 @@
         function openFile(path) {
             const rawUrl = `https://raw.githubusercontent.com/pengqinquan/pengqinquan.github.io/main/${path}`;
             
-            if (path.endsWith('.cpp') || path.endsWith('.c') || path.endsWith('.h') || path.endsWith('.txt')) {
-                // 代码文件：打开 viewer.html
+            if (path.endsWith('.cpp') || path.endsWith('.c') || path.endsWith('.h') || path.endsWith('.txt') || path.endsWith('.gitignore')) {
+                // 代码/文本文件跳转代码预览页
                 const viewerUrl = `viewer.html?file=${encodeURIComponent(path)}`;
                 window.open(viewerUrl, '_blank');
             } else if (path.endsWith('.pdf')) {
-                // PDF：直接打开
+                // PDF直接在线打开
                 window.open(rawUrl, '_blank');
+            } else if(path.endsWith('.html')){
+                window.open(rawUrl,'_blank');
             } else {
-                alert('打开文件: ' + path);
+                alert('暂不支持打开该类型文件：' + path);
             }
         }
         
-        // 初始化
+        // 初始化页面渲染
         renderStats();
         render();
     </script>
