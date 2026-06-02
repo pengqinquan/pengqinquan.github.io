@@ -1,136 +1,131 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>CCPC 答题模板库</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
         .header {
-            background: rgba(255,255,255,0.95);
-            padding: 20px 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .header h1 { font-size: 1.8rem; color: #1a1a2e; }
-        .header p { color: #666; margin-top: 5px; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
-        .breadcrumb {
-            background: rgba(255,255,255,0.2);
-            padding: 10px 20px;
-            border-radius: 30px;
-            display: inline-block;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
             margin-bottom: 20px;
         }
-        .breadcrumb span { color: white; cursor: pointer; margin: 0 5px; }
-        .files-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
         }
-        .file-card {
+        .folder {
             background: white;
-            border-radius: 16px;
-            padding: 20px;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .file-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-        .file-icon { font-size: 40px; margin-bottom: 10px; }
-        .file-name { font-weight: 600; font-size: 1rem; }
-        .file-type { font-size: 0.75rem; color: #888; margin-top: 8px; }
-        .empty { text-align: center; padding: 50px; background: white; border-radius: 16px; color: #999; }
+        .folder:hover {
+            background: #f0f0f0;
+        }
+        .file {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            margin: 5px 0 5px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .back {
+            background: #6c757d;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>📚 CCPC 答题模板库</h1>
-        <p>算法竞赛模板 | 数据结构 | 高精度计算</p>
-    </div>
     <div class="container">
-        <div class="breadcrumb" id="breadcrumb"></div>
-        <div id="fileList" class="files-grid"></div>
+        <div class="header">
+            <h1>📚 CCPC 答题模板库</h1>
+            <p>算法竞赛模板 | 数据结构 | 高精度计算</p>
+        </div>
+        
+        <div id="content"></div>
     </div>
 
     <script>
-        const FILE_TREE = [
-            { name: "高精度加法", type: "folder", children: [
-                { name: "高精度加法.cpp", type: "file", ext: "cpp" },
-                { name: "高精度加法.pdf", type: "file", ext: "pdf" }
-            ] },
-            { name: "数据结构", type: "folder", children: [
-                { name: "栈", type: "folder", children: [
-                    { name: "括号配比问题.cpp", type: "file", ext: "cpp" }
-                ] }
-            ] }
-        ];
-
-        let currentPath = [];
-
-        function getIcon(item) {
-            if (item.type === "folder") return "📁";
-            if (item.ext === "cpp") return "📝";
-            if (item.ext === "pdf") return "📕";
-            return "📄";
-        }
-
-        function getContents() {
-            if (currentPath.length === 0) return FILE_TREE;
-            let current = FILE_TREE;
-            for (let i = 0; i < currentPath.length; i++) {
-                let found = null;
-                for (let j = 0; j < current.length; j++) {
-                    if (current[j].name === currentPath[i] && current[j].type === "folder") {
-                        found = current[j];
-                        break;
+        const data = {
+            '高精度加法': {
+                type: 'folder',
+                children: {
+                    '高精度加法.cpp': { type: 'file', ext: 'cpp' },
+                    '高精度加法.pdf': { type: 'file', ext: 'pdf' }
+                }
+            },
+            '数据结构': {
+                type: 'folder',
+                children: {
+                    '栈': {
+                        type: 'folder',
+                        children: {
+                            '括号配比问题.cpp': { type: 'file', ext: 'cpp' }
+                        }
                     }
                 }
-                if (!found || !found.children) return [];
-                current = found.children;
+            }
+        };
+        
+        let currentPath = [];
+        
+        function getCurrent() {
+            let current = data;
+            for (let i = 0; i < currentPath.length; i++) {
+                current = current[currentPath[i]].children;
             }
             return current;
         }
-
+        
         function render() {
-            const contents = getContents();
-            const container = document.getElementById('fileList');
-            const breadcrumbDiv = document.getElementById('breadcrumb');
-            
-            let breadHtml = `<span onclick="goToPath([])">🏠 首页</span>`;
-            let temp = [];
-            for (let i = 0; i < currentPath.length; i++) {
-                temp.push(currentPath[i]);
-                breadHtml += ` / <span onclick="goToPath(${JSON.stringify(temp)})">${currentPath[i]}</span>`;
-            }
-            breadcrumbDiv.innerHTML = breadHtml;
-            
-            if (!contents || contents.length === 0) {
-                container.innerHTML = '<div class="empty">📭 此文件夹为空</div>';
-                return;
-            }
+            const current = getCurrent();
+            const contentDiv = document.getElementById('content');
             
             let html = '';
-            for (let i = 0; i < contents.length; i++) {
-                const item = contents[i];
-                const isFolder = item.type === "folder";
-                html += `<div class="file-card" onclick="${isFolder ? `goToPath(${JSON.stringify([...currentPath, item.name])})` : `alert('打开文件: ${item.name}')`}">
-                    <div class="file-icon">${getIcon(item)}</div>
-                    <div class="file-name">${item.name}</div>
-                    <div class="file-type">${isFolder ? '文件夹' : item.ext.toUpperCase() + ' 文件'}</div>
-                </div>`;
+            
+            if (currentPath.length > 0) {
+                html += '<button class="back" onclick="goBack()">← 返回上级</button>';
             }
-            container.innerHTML = html;
+            
+            for (let name in current) {
+                const item = current[name];
+                if (item.type === 'folder') {
+                    html += `<div class="folder" onclick="openFolder('${name}')">📁 ${name}</div>`;
+                } else {
+                    html += `<div class="file" onclick="openFile('${name}')">📄 ${name}</div>`;
+                }
+            }
+            
+            contentDiv.innerHTML = html;
         }
-
-        window.goToPath = function(pathArray) {
-            currentPath = pathArray;
+        
+        function openFolder(name) {
+            currentPath.push(name);
             render();
-        };
-
+        }
+        
+        function goBack() {
+            currentPath.pop();
+            render();
+        }
+        
+        function openFile(name) {
+            alert('打开文件: ' + name);
+        }
+        
         render();
     </script>
 </body>
