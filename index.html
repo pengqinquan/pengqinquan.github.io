@@ -240,14 +240,9 @@
 <script>
     // ============================================================
     // 完整文件树 (基于真实仓库结构，所有文件夹均已补全实际文件)
-    // 包含：数据结构/栈/后置表达式计算（两个模板变体）、基本题（含模版）、括号配比问题（含模版）
-    // 以及高精度加法、根目录文件等
     // ============================================================
     const REPO_BASE = "https://raw.githubusercontent.com/pengqinquan/pengqinquan.github.io/main/";
 
-    // ------------------------------------------------------------
-    // 完整文件树 (已修正：基本题/模版 和 括号配比问题/模版 均包含实际文件)
-    // ------------------------------------------------------------
     const FILE_TREE = {
         "数据结构": {
             type: "folder",
@@ -330,6 +325,21 @@
                 "高精度加法 (1).pdf": { type: "file", path: "高精度加法/高精度加法 (1).pdf", ext: "pdf", size: "512 KB" }
             }
         },
+        // ✅ 已正确添加 高精度乘法
+        "高精度乘法": {
+            type: "folder",
+            path: "高精度乘法",
+            children: {
+                "模版": { 
+                    type: "folder", 
+                    path: "高精度乘法/模版", 
+                    children: {
+                        "高精度乘法.cpp": { type: "file", path: "高精度乘法/模版/高精度乘法.cpp", ext: "cpp", size: "1.8 KB" }
+                    } 
+                },
+                "高精度乘法.pdf": { type: "file", path: "高精度乘法/高精度乘法.pdf", ext: "pdf", size: "512 KB" }
+            }
+        },
         ".gitignore": { type: "file", path: ".gitignore", ext: "gitignore", size: "0.2 KB" },
         "index.html": { type: "file", path: "index.html", ext: "html", size: "3.4 KB" },
         "test.html": { type: "file", path: "test.html", ext: "html", size: "1.1 KB" },
@@ -338,7 +348,6 @@
 
     let currentPathStack = [];
 
-    // 根据路径栈获取当前节点对象 (返回 children 域)
     function getCurrentNode() {
         if (currentPathStack.length === 0) return FILE_TREE;
         let node = FILE_TREE;
@@ -351,7 +360,6 @@
         return node;
     }
 
-    // 获取当前显示的条目列表
     function getCurrentItems() {
         const currentNode = getCurrentNode();
         if (!currentNode) return {};
@@ -364,7 +372,6 @@
         return items;
     }
 
-    // 全局统计
     function computeGlobalStats() {
         let folders = 0, files = 0;
         function traverse(obj) {
@@ -434,13 +441,11 @@
         renderMainContent();
     }
 
-    // 处理文件打开
     function handleOpenFile(fileNode, fileName) {
         const rawPath = fileNode.path;
         const fullRawUrl = `${REPO_BASE}${rawPath}`;
         const ext = fileNode.ext || '';
         
-        // 代码/文本类文件通过 viewer.html 预览（代码高亮）
         if (ext === 'cpp' || ext === 'c' || ext === 'txt' || ext === 'gitignore' || ext === 'h' || fileName.endsWith('.cpp') || fileName.endsWith('.txt')) {
             const viewerUrl = `viewer.html?file=${encodeURIComponent(rawPath)}`;
             window.open(viewerUrl, '_blank');
@@ -526,7 +531,6 @@
         for (let file of files) {
             const icon = getItemIcon(file, file.name);
             let sizeTag = file.size ? `<span class="file-meta">${escapeHtml(file.size)}</span>` : `<span class="file-meta">${escapeHtml(file.ext || 'file')}</span>`;
-            // 使用 data-json 传递安全数据
             const fileData = {
                 type: file.type,
                 path: file.path,
@@ -545,7 +549,6 @@
         
         container.innerHTML = html;
         
-        // 绑定文件点击事件（避免 inline onclick 导致的 JSON 转义问题）
         const fileElements = container.querySelectorAll('.file-card');
         fileElements.forEach(el => {
             const fileDataAttr = el.getAttribute('data-file');
@@ -562,13 +565,11 @@
         });
     }
 
-    // 全局挂载函数
     window.openFolder = openFolder;
     window.goUp = goUp;
     window.navigateToPath = navigateToPath;
     window.handleOpenFile = handleOpenFile;
     
-    // 初始化
     renderMainContent();
 </script>
 </body>
